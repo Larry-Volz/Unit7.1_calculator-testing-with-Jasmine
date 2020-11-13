@@ -30,17 +30,19 @@ function setupIntialValues() {
   
   // console.log(`loan amount: ${amount}`);   
   
-  values = {"amount": amount, "years":years, "rate":rate};
+  values = {"amount": amount.value, "years":years.value, "rate":rate.value};
 
-  calculateMonthlyPayment(values);
+  let monthly = calculateMonthlyPayment(values);
+
+  updateMonthly(monthly);
 }
 
 // Get the current values from the UI
 // Update the monthly payment
 function update() {
-  let amount = document.querySelector("#loan-amount");
-  let years = document.querySelector("#loan-years");
-  let rate = document.querySelector("#loan-rate");
+  let amount = document.querySelector("#loan-amount").value;
+  let years = document.querySelector("#loan-years").value;
+  let rate = document.querySelector("#loan-rate").value;
   
   // console.log(`loan amount: ${amount}`);   
   
@@ -59,25 +61,25 @@ function update() {
 // calculate the monthly payment.  The output should be a string
 // that always has 2 decimal places.
 function calculateMonthlyPayment(values) {
-  // console.log(values);
-  // let amount = +(values.amount);
-  // let rate = +(values.rate);
-  // let years = +(values.years);
+  console.log(values);
+  let amount = +(values.amount);
+  let rate = +(values.rate);
+  let years = +(values.years);
 
-  // console.log(`amount = : ${amount}`);
-  // console.log(`amount = : ${rate}`);
-  // console.log(`amount = : ${years}`);
+  console.log(`MADE IT HERE amount = : ${amount}`);
+  console.log(`RATE = : ${rate}`);
+  console.log(`years = : ${years}`);
 
-  // let monthlyPayment = (amount*rate);// /(1-Math.pow((1+v.rate), -v.years));
-  // monthlyPayment = (Math.round(monthlyPayment*100))/100;
-  // return monthlyPayment;
+  let monthlyPayment = (amount*rate)/(1-Math.pow((1+rate), -years));
+  monthlyPayment = (Math.round(monthlyPayment*100))/100;
+  return monthlyPayment;
 
-  return 1300;
+  // return 1500;
 }
 
 // Given a string representing the monthly payment value,
 // update the UI to show the value.
 function updateMonthly(monthly) {
-    // document.querySelector("#monthly-payment").value = monthly;
-    document.getElementById("monthly-payment") = monthly;
+    document.querySelector("#monthly-payment").innerText = monthly;
+   // document.getElementById("monthly-payment").innerText = monthly;
 }
