@@ -40,21 +40,24 @@ function setupIntialValues() {
 // Get the current values from the UI
 // Update the monthly payment
 function update() {
-  let amount = document.querySelector("#loan-amount").value;
-  let years = document.querySelector("#loan-years").value;
-  let rate = document.querySelector("#loan-rate").value;
-  
-  // console.log(`loan amount: ${amount}`);   
-  
-  values = {"amount": amount, "years":years, "rate":rate};
+  if (document.querySelector("#loan-rate").value <= 0) {
+     invalidRate();
+  } else {
+    let amount = document.querySelector("#loan-amount").value;
+    let years = document.querySelector("#loan-years").value;
+    let rate = document.querySelector("#loan-rate").value;
+    
+    // console.log(`loan amount: ${amount}`);   
+    
+    values = {"amount": amount, "years":years, "rate":rate};
 
-  //calculate monthly payment
-  let monthly = calculateMonthlyPayment(values);
-  console.log(`monthly = ${monthly}`)
+    //calculate monthly payment
+    let monthly = calculateMonthlyPayment(values);
+    console.log(`monthly = ${monthly}`)
 
-  //update UI
-  updateMonthly(monthly)
-
+    //update UI
+    updateMonthly(monthly)
+  }
 }
 
 // Given an object of values (a value has amount, years and rate ),
@@ -66,11 +69,14 @@ function calculateMonthlyPayment(values) {
   let rate = +(values.rate);
   let years = +(values.years);
 
+  let perRate = rate/12;
+  let payments = years*12;
+
   console.log(`MADE IT HERE amount = : ${amount}`);
   console.log(`RATE = : ${rate}`);
   console.log(`years = : ${years}`);
 
-  let monthlyPayment = (amount*rate)/(1-Math.pow((1+rate), -years));
+  let monthlyPayment = (amount*perRate)/(1-Math.pow((1+perRate), -payments));
   monthlyPayment = (Math.round(monthlyPayment*100))/100;
   return monthlyPayment;
 
@@ -83,3 +89,10 @@ function updateMonthly(monthly) {
     document.querySelector("#monthly-payment").innerText = monthly;
    // document.getElementById("monthly-payment").innerText = monthly;
 }
+
+function invalidRate(){
+  setTimeout(function(){
+    document.querySelector("#loan-rate").value = 0.04;
+  }, 1000)
+  document.querySelector("#loan-rate").value = "NOT A VALID ENTRY";
+};
